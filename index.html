@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام فـtech الاحترافي لإصدار ودمج الفواتير</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="brand">مركز خان شيخون  <i class="fas fa-file-invoice"></i></div>
+            <nav class="tab-navigation">
+                <button class="tab-btn active" data-tab="pos-tab"><i class="fas fa-plus-circle"></i> فاتورة جديدة</button>
+                <button class="tab-btn" data-tab="invoices-tab"><i class="fas fa-history"></i> أرشيف الفواتير والبحث</button>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            
+            <section id="pos-tab" class="tab-content active">
+                <div class="grid-2">
+                    <div class="glass-card">
+                        <h3><i class="fas fa-edit"></i> تسجيل بيانات الفاتورة الحرة</h3>
+                        <form id="invoice-form">
+                            <div class="grid-2-form">
+                                <div class="form-group">
+                                    <label>اسم العميل:</label>
+                                    <input type="text" id="inv-customer" required placeholder="اسم العميل الكامل">
+                                </div>
+                                <div class="form-group">
+                                    <label>تاريخ الفاتورة (اختياري):</label>
+                                    <input type="date" id="inv-date">
+                                </div>
+                            </div>
+                            
+                            <div class="grid-2-form">
+                                <div class="form-group">
+                                    <label>نوع الجوال / الموديل (كتابة حرة):</label>
+                                    <input type="text" id="inv-product" required placeholder="مثال: iPhone 17 Pro Max">
+                                </div>
+                                <div class="form-group">
+                                    <label>السعر الإجمالي ($):</label>
+                                    <input type="number" id="inv-price" required min="0" placeholder="0.00">
+                                </div>
+                            </div>
+
+                            <div class="grid-2-form">
+                                <div class="form-group">
+                                    <label>الكمية:</label>
+                                    <input type="number" id="inv-qty" value="1" min="1" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>طريقة الدفع:</label>
+                                    <select id="inv-payment">
+                                        <option value="كاش">كاش</option>
+                                        <option value="شبكة">شبكة / فيزا</option>
+                                        <option value="تقسيط">تقسيط</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>ملاحظات إضافية على الفاتورة (الضمان، السيريال، إلخ):</label>
+                                <textarea id="inv-notes" rows="3" placeholder="اكتب هنا أي ملاحظات تظهر في الفاتورة..."></textarea>
+                            </div>
+
+                            <button type="submit" class="btn-green"><i class="fas fa-save"></i> حفظ الفاتورة في الأرشيف</button>
+                        </form>
+                    </div>
+
+                    <div class="glass-card flex-center">
+                        <h3><i class="fas fa-wallet"></i> الملخص المالي اليومي</h3>
+                        <div class="stats-grid">
+                            <div class="stat-box">
+                                <h5>إجمالي المبيعات المحفوظة</h5>
+                                <span id="stat-sales">$0</span>
+                            </div>
+                            <div class="stat-box">
+                                <h5>عدد الفواتير الصادرة</h5>
+                                <span id="stat-count">0 فاتورة</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="invoices-tab" class="tab-content">
+                <div class="glass-card filter-box">
+                    <h3><i class="fas fa-filter"></i> محرك الفلترة والبحث اللحظي</h3>
+                    <div class="filter-grid-dynamic">
+                        <div class="search-inputs">
+                            <input type="text" id="search-customer" placeholder="بحث باسم العميل للدمج...">
+                            <input type="text" id="search-product" placeholder="بحث بنوع الجوال...">
+                            <select id="filter-payment">
+                                <option value="all">كل طرق الدفع</option>
+                                <option value="كاش">كاش</option>
+                                <option value="شبكة">شبكة</option>
+                                <option value="تقسيط">تقسيط</option>
+                            </select>
+                        </div>
+                        <div id="merge-action-container" style="display: none;">
+                            <button type="button" id="btn-merge-invoices" class="btn-merge">
+                                <i class="fab fa-whatsapp"></i> دمج فواتير هذا العميل وتحويلها واتساب (<span id="merge-count">0</span>)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card table-section">
+                    <h3><i class="fas fa-list-alt"></i> الفواتير السابقة الصادرة</h3>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>رقم الفاتورة</th>
+                                    <th>التاريخ</th>
+                                    <th>العميل</th>
+                                    <th>الجوال</th>
+                                    <th>الكمية</th>
+                                    <th>الدفع</th>
+                                    <th>الإجمالي</th>
+                                    <th>الملاحظات</th>
+                                    <th>إجراءات ومشاركة</th>
+                                </tr>
+                            </thead>
+                            <tbody id="invoices-table-body">
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
